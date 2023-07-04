@@ -1,29 +1,31 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Container, Main } from "../components/layouts";
-// import useSingleContact from "../hooks/useSingleContact";
-// import useDeleteContact from "../hooks/useDeleteContact";
 import Spinner from "../components/ui-ux/Spinner";
 import { useForm } from "react-hook-form";
-import { Contact } from "../entities";
 import { useEffect, useState } from "react";
-import useSingleUser from "../hooks/useSingleUser";
-import useDeleteUser from "../hooks/useDeleteUser";
-import useUpdateUser from "../hooks/useUpdateUser";
 import { User } from "../services/userService";
-// import useUpdateContact from "../hooks/useUpdateContact";
+import { useUserStore } from "../hooks/useUserStore";
 
 const UserDetailPage = () => {
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
-  const { user, isLoading, error } = useSingleUser(params.id);
-  // console.log("User:", user);
-  // console.log("isEditing", isEditing);
+  // FETCHING SINGLE USER FROM ZUSTAND STORE HOOK
+  // Following is an example of separating the states so that re-rendering is kept separate
+  const fetchUser = useUserStore((state) => state.fetchUser);
+  const user = useUserStore((state) => state.user);
+  const error = useUserStore((state) => state.error);
+  const isLoading = useUserStore((state) => state.isLoading);
 
-  // EDITING CONTACT
+  useEffect(() => {
+    fetchUser(params?.id || "");
+  }, [fetchUser, params.id]);
+
+  // EDITING CONTACT IN REACT HOOK FORM
   const { register, handleSubmit, setValue } = useForm<User>();
-  const { updateUser } = useUpdateUser();
+  // UPDATE USER IN ZUSTAND STORE HOOK
+  const updateUser = useUserStore((state) => state.updateUser);
 
   useEffect(() => {
     if (user) {
@@ -43,8 +45,8 @@ const UserDetailPage = () => {
     }
   };
 
-  // DELETING CONTACT
-  const { deleteUser } = useDeleteUser();
+  // DELETING A SINGLE USER FROM ZUSTAND STORE
+  const deleteUser = useUserStore((state) => state.removeUser);
 
   const deleteItem = async (id: string = "") => {
     if (window.confirm("Are you sure you want to delete this item?")) {
@@ -60,7 +62,7 @@ const UserDetailPage = () => {
     }
   };
 
-  if (isLoading) return <Spinner />;
+  // if (isLoading) return <Spinner />;
 
   if (error) return <h1>A Moose error has occured! </h1>;
 
@@ -69,6 +71,7 @@ const UserDetailPage = () => {
   return (
     <Main>
       <Container FULL={false} pageTitle="Routing" className={""}>
+        {isLoading && <Spinner />}
         <Box className="p-7 prose max-w-none">
           <h3>
             <span className="font-extrabold text-primary">User ID:</span>{" "}

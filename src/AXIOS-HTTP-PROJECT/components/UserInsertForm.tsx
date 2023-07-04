@@ -3,23 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import useAddUser from "../hooks/useAddUser";
 import { User } from "../services/userService";
+import { useUserStore } from "../hooks/useUserStore";
 
 const UserInsertForm = () => {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<User>();
-  const { addUser, error, isLoading } = useAddUser();
+  // const { addUser, error, isLoading } = useAddUser();
+
+  // FETCHING SINGLE USER FROM ZUSTAND STORE HOOK
+  // Following is an example of separating the states so that re-rendering is kept separate
+  const addUser = useUserStore((state) => state.addUser);
+  const user = useUserStore((state) => state.user);
+  const error = useUserStore((state) => state.error);
+  const isLoading = useUserStore((state) => state.isLoading);
 
   const onSubmit = (user: User) => {
     const contactWithId = { ...user, id: uuidv4() };
     // console.log(contactWithId);
-
     addUser(contactWithId);
-    // navigate("/users");
   };
 
   if (error) return <h1>A Moose error has occured! </h1>;

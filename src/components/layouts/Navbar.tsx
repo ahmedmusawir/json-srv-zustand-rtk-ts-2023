@@ -35,7 +35,7 @@ const Navbar = ({ className }: Props) => {
       <div id="navbarNav" className="navber-end  hidden sm:flex">
         <ul className="menu menu-horizontal px-1 space-x-4">
           <NavItem to="/contacts">Contacts</NavItem>
-          <NavItem to="/users">AXIOS HTTP</NavItem>
+          <NavItem to="/users">ZUSTAND STORE</NavItem>
           {/* <NavItem to="/users">Users</NavItem>
           <NavItem to="/appointments">Appointments</NavItem>
           <NavItem to="/slots">Slots</NavItem>

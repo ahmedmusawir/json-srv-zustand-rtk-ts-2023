@@ -3,7 +3,7 @@ import { CanceledError } from "../services/apiClient";
 import userService, { User } from "../services/userService";
 import { UserContext } from "../contexts/UserContext";
 
-const useUsers = () => {
+const useFetchUsers = () => {
   const { state, dispatch } = useContext(UserContext);
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const useUsers = () => {
   return { users: state.users, error: state.error, isLoading: state.isLoading };
 };
 
-export default useUsers;
+export default useFetchUsers;

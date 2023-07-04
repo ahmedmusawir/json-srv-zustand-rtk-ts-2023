@@ -3,13 +3,20 @@ import UserList from "../components/UserList";
 import { Container, Row, Box } from "../components/layouts";
 import Spinner from "../components/ui-ux/Spinner";
 import { animated, useSpring } from "react-spring";
-import { useState } from "react";
-import useUsers from "../hooks/useUsers";
+import { useEffect, useState } from "react";
 import UserInsertForm from "../components/UserInsertForm";
+// import useFetchUsers from "../hooks/useFetchUsers";
+import { useUserStore } from "../hooks/useUserStore";
 
 const UsersAdminPage = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { users, isLoading, error } = useUsers();
+  // const { users, isLoading, error } = useFetchUsers();
+
+  const { users, isLoading, error, fetchUsers } = useUserStore();
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   // console.log("data:", users);
 
@@ -38,14 +45,10 @@ const UsersAdminPage = () => {
       <Row className={"prose flex justify-between"}>
         <div className="header-text">
           <h1 className="h1">
-            Context CRUD Project: <br /> <small>User Admin Page</small>
+            Zustand CRUD Project: <br /> <small>User Admin Page</small>
           </h1>
           <h4 className="pr-10">
-            Based on local Json Server. Here we only setup the generic http
-            server with Axios, have a apiClent with the API URL and headers,
-            Services like userService with data type details and custom hooks
-            like useUsers.ts, addUsers.ts, deleteUsers.ts and updateUsers.ts.
-            CONTEXT/REDUCER implementation has begun
+            Based on local Json Server. ZUSTAND STORE implementation has begun
           </h4>
         </div>
         <button
