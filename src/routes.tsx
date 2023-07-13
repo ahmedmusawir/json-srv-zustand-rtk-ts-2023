@@ -4,11 +4,11 @@ import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import NotFoundPage from "./pages/NotFoundPage";
 import IframeTestPage from "./pages/IframePage";
-import ContactsGHLPage from "./pages/ContactsGHLPage";
 import Demo from "./pages/Demo";
 import ContactDetails from "./components/ContactDetails";
 import UsersAdminPage from "./AXIOS-HTTP-PROJECT/pages/UsersAdminPage";
 import UserDetailPage from "./AXIOS-HTTP-PROJECT/pages/UserDetailPage";
+import ContactsRTKPage from "./pages/ContactsRTKPage";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       // THE FOLLOWING IS THE BASE PROJECT - GHL CONTACTS WITH LOCAL JSON SERVER @ http://localhost:3500
       {
         path: "contacts",
-        element: <ContactsGHLPage />,
+        element: <ContactsRTKPage />,
         children: [{ path: ":id", element: <ContactDetails /> }],
       },
       { path: "demo", element: <Demo /> },

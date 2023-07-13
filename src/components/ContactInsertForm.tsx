@@ -1,22 +1,26 @@
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
 import { Contact } from "../entities";
-import useAddContact from "../hooks/useAddContact";
+import {
+  useCreateContactMutation,
+  ContactInsert,
+} from "../services/contactRTKApi";
 
-const ContactInsert = () => {
+const ContactInsertForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Contact>();
+  } = useForm<ContactInsert>();
 
-  const addContact = useAddContact();
+  const [createContact] = useCreateContactMutation();
 
-  const onSubmit = (contact: Contact) => {
-    const contactWithId = { ...contact, id: uuidv4() };
-
-    console.log(contactWithId);
-    addContact.mutate(contactWithId);
+  const onSubmit = (contact: ContactInsert) => {
+    // const contactWithId = { ...contact, id: uuidv4() };
+    // console.log(contactWithId);
+    // addContact.mutate(contactWithId);
+    createContact(contact);
+    console.log("Contact Insert:", contact);
   };
 
   return (
@@ -31,7 +35,6 @@ const ContactInsert = () => {
           <p className="text-error">{errors.firstName.message}</p>
         )}
       </div>
-
       {/* <div className="form-control">
         <label>Last Name</label>
         <input
@@ -42,7 +45,6 @@ const ContactInsert = () => {
           <p className="text-error">{errors.lastName.message}</p>
         )}
       </div> */}
-
       <div className="form-control">
         <label>Email</label>
         <input
@@ -57,7 +59,6 @@ const ContactInsert = () => {
         />
         {errors.email && <p className="text-error">{errors.email.message}</p>}
       </div>
-
       {/* <div className="form-control">
         <label>Phone</label>
         <input
@@ -66,7 +67,6 @@ const ContactInsert = () => {
         />
         {errors.phone && <p className="text-error">{errors.phone.message}</p>}
       </div> */}
-
       {/* <div className="form-control">
         <label>Company</label>
         <input
@@ -77,7 +77,6 @@ const ContactInsert = () => {
           <p className="text-error">{errors.companyName.message}</p>
         )}
       </div> */}
-
       <button className="btn btn-primary my-5 btn-wide btn-lg" type="submit">
         Submit
       </button>
@@ -85,4 +84,4 @@ const ContactInsert = () => {
   );
 };
 
-export default ContactInsert;
+export default ContactInsertForm;

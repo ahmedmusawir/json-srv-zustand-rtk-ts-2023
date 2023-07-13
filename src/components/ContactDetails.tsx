@@ -1,23 +1,36 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Container, Main } from "../components/layouts";
-import useSingleContact from "../hooks/useSingleContact";
-import useDeleteContact from "../hooks/useDeleteContact";
 import Spinner from "./ui-ux/Spinner";
 import { useForm } from "react-hook-form";
-import { Contact } from "../entities";
 import { useEffect, useState } from "react";
 import useUpdateContact from "../hooks/useUpdateContact";
+import {
+  Contact,
+  ContactData,
+  ContactSingleData,
+  useDeleteContactMutation,
+  useGetSingleContactQuery,
+  useUpdateContactMutation,
+} from "../services/contactRTKApi";
 
 const ContactDetails = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const { data: contact, isLoading, error } = useSingleContact(params.id);
+  const {
+    data: singleContactData,
+    isLoading,
+    error,
+  } = useGetSingleContactQuery(Number(params.id));
   // const { contact } = data || {};
-  // console.log("isEditing", isEditing);
+
+  const contact = singleContactData?.data.attributes;
+  const contactId = Number(params.id);
+  // console.log("Single Contact", contact);
 
   // EDITING CONTACT
   const { register, handleSubmit, setValue } = useForm<Contact>();
-  const handleUpdate = useUpdateContact();
+  const [updateContact] = useUpdateContactMutation();
 
   useEffect(() => {
     if (contact) {
@@ -25,7 +38,6 @@ const ContactDetails = () => {
       setValue("lastName", contact.lastName || "");
       setValue("email", contact.email || "");
       setValue("phone", contact.phone || "");
-      setValue("companyName", contact.companyName || "");
     }
   }, [contact, setValue]);
 
@@ -33,25 +45,23 @@ const ContactDetails = () => {
     console.log(data);
     setIsEditing(false);
     // Call your update function here
-    handleUpdate.mutate({
-      id: params.id,
-      updates: data,
-    });
+    updateContact({ contact: data, id: contactId });
   };
 
   // DELETING CONTACT
-  const { mutateAsync } = useDeleteContact();
+  // const contactId = Number(params.id);
+  const [deleteContact] = useDeleteContactMutation();
 
   if (isLoading) return <Spinner />;
 
   if (error) return <h1>A Moose error has occured! </h1>;
 
-  const deleteItem = async (id: string = "") => {
+  const deleteItem = () => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
-        await mutateAsync(id);
+        deleteContact(contactId);
         console.log("Todo deleted successfully");
-        // window.location.reload();
+        navigate("/contacts");
       } catch (err) {
         console.log("An error occurred:", err);
       }
@@ -69,6 +79,7 @@ const ContactDetails = () => {
             {params.id}
           </h3>
           <form onSubmit={handleSubmit(onSubmit)} className="form-control">
+            {/* <form className="form-control"> */}
             <h3>
               <label>
                 First Name:{" "}
@@ -109,7 +120,7 @@ const ContactDetails = () => {
                 />
               </label>
             </h3>
-            <h3>
+            {/* <h3>
               <label>
                 Company:{" "}
                 <input
@@ -118,7 +129,7 @@ const ContactDetails = () => {
                   disabled={!isEditing}
                 />
               </label>
-            </h3>
+            </h3> */}
             {isEditing && (
               <button className="btn" type="submit">
                 Save
@@ -138,10 +149,7 @@ const ContactDetails = () => {
           )}
         </Box>
         <Box className="p-7 prose max-w-none">
-          <button
-            className="btn btn-error"
-            onClick={() => deleteItem(contact?.id)}
-          >
+          <button className="btn btn-error" onClick={() => deleteItem()}>
             Delete
           </button>
         </Box>

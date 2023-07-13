@@ -2,16 +2,19 @@ import { Outlet } from "react-router-dom";
 import ContactsList from "../components/ContactsList";
 import { Container, Row, Box } from "../components/layouts";
 import Spinner from "../components/ui-ux/Spinner";
-import useContacts from "../hooks/useContacts";
-import ContactInsert from "../components/ContactInsert";
 import { animated, useSpring } from "react-spring";
 import { useState } from "react";
+import { useGetAllContactsQuery } from "../services/contactRTKApi";
+import ContactInsertForm from "../components/ContactInsertForm";
 
-const ContactsGHLPage = () => {
+const ContactsRTKPage = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: contacts, isLoading, error } = useContacts();
+  const { data: apiResponse, isLoading, error } = useGetAllContactsQuery();
 
-  // console.log("data:", contacts);
+  console.log("API Response Data:", apiResponse);
+
+  const contacts = apiResponse?.data;
+  console.log("Contacts:", contacts);
 
   const styles = useSpring({
     to: async (next, cancel) => {
@@ -39,8 +42,8 @@ const ContactsGHLPage = () => {
     <Container className={""} FULL={false} pageTitle={"Contacts"}>
       <Row className={"prose flex justify-between"}>
         <div className="header-text">
-          <h1 className="h1">Json Server Contacts + React Query</h1>
-          <h4 className="h2">JSON Srv LOCAL 0.17.3 & REACT QUERY</h4>
+          <h1 className="h1">Strapi Contacts + RTK Query (Redux)</h1>
+          <h4 className="h2">Strapi v4 & Redux 8.1.1 & RTK 1.9.5</h4>
         </div>
         <button
           className="btn btn-primary my-5 btn-wide btn-lg"
@@ -57,18 +60,12 @@ const ContactsGHLPage = () => {
           <h2 className="h1">Insert Contacts</h2>
           <hr />
           <Box className="card-normal bg-base-100 shadow-xl px-10">
-            <ContactInsert />
+            <ContactInsertForm />
           </Box>
         </Row>
       </animated.div>
       <Row className={"grid gap-3 grid-auto-fit p-1"}>
         <Box className={""}>
-          {/* {data?.map((contact, index) => (
-            <div key={index}>
-              <p>Email: {contact.email}</p>
-            </div>
-          ))} */}
-
           <ContactsList contacts={contacts} />
         </Box>
         <Box className={"border bg-gray-100"}>
@@ -79,4 +76,4 @@ const ContactsGHLPage = () => {
   );
 };
 
-export default ContactsGHLPage;
+export default ContactsRTKPage;
