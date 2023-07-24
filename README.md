@@ -1,3 +1,3 @@
-# json-srv-crud-react-ts-2023
+# json-srv-crud-rtk-zustand-ts-2023
 
-## Two Json Server, React Query & Contex/Reducer Based CRUD POC-s mimicing GHL contacts in api v.1
+## Two Json Server, Redux RTK Query & Zustand Based CRUD POC-s mimicing GHL contacts in api v.1

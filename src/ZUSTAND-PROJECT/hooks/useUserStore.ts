@@ -12,8 +12,6 @@ interface State {
   addUser: (user: User) => Promise<void>;
   removeUser: (id: string) => Promise<void>;
   updateUser: (user: User) => Promise<void>;
-
-  // Add updateUser, removeUser etc. here
 }
 
 export const useUserStore = create<State>((set, get) => ({
@@ -27,16 +25,14 @@ export const useUserStore = create<State>((set, get) => ({
 
     request
       .then((res) => {
-        //   dispatch({ type: "FETCH_USERS", payload: res.data });
         set({ users: res.data, isLoading: false });
       })
       .catch((err) => {
-        //   dispatch({ type: "FETCH_USERS_ERROR", payload: err.message });
         if (err instanceof CanceledError) return;
         set({ error: err.message, isLoading: false });
       });
   },
-  // Add the implementation for updateUser, removeUser etc. here
+  // Implementation for updateUser, removeUser etc. here
   fetchUser: async (id: string = "") => {
     // Try to find the user in the state
     const user = get().users.find((user) => user.id === id);
@@ -78,17 +74,12 @@ export const useUserStore = create<State>((set, get) => ({
 
     try {
       await userService.delete(id);
-      // console.log("Deleted User:", res.data);
-      // dispatch({ type: "REMOVE_USER", payload: id });
       set((state) => ({
         users: state.users.filter((user) => user.id !== id),
         isLoading: false,
       }));
-
-      // setIsLoading(false);
     } catch (err) {
       if (err instanceof Error) {
-        //   dispatch({ type: "FETCH_USERS_ERROR", payload: err.message });
         set({ error: err.message, isLoading: false });
       }
     }
@@ -98,14 +89,12 @@ export const useUserStore = create<State>((set, get) => ({
 
     try {
       const res = await userService.update(user);
-      // dispatch({ type: "UPDATE_USER", payload: res.data });
       set((state) => ({
         users: state.users.map((u) => (u.id === user.id ? res.data : u)),
         isLoading: false,
       }));
     } catch (err) {
       if (err instanceof Error) {
-        // dispatch({ type: "FETCH_USERS_ERROR", payload: err.message });
         set({ error: err.message, isLoading: false });
       }
     }

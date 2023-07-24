@@ -5,7 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UserProvider } from "./AXIOS-HTTP-PROJECT/contexts/UserContext";
 import { Provider } from "react-redux";
 import store from "./store/store";
 
@@ -18,11 +17,9 @@ root.render(
   <React.StrictMode>
     {/* <App /> */}
     <Provider store={store}>
-      <UserProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </UserProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </Provider>
   </React.StrictMode>
 );

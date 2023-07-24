@@ -3,7 +3,6 @@ import { Box, Container, Main } from "../components/layouts";
 import Spinner from "./ui-ux/Spinner";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import useUpdateContact from "../hooks/useUpdateContact";
 import {
   Contact,
   ContactData,

@@ -6,8 +6,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import IframeTestPage from "./pages/IframePage";
 import Demo from "./pages/Demo";
 import ContactDetails from "./components/ContactDetails";
-import UsersAdminPage from "./AXIOS-HTTP-PROJECT/pages/UsersAdminPage";
-import UserDetailPage from "./AXIOS-HTTP-PROJECT/pages/UserDetailPage";
+import UsersAdminPage from "./ZUSTAND-PROJECT/pages/UsersAdminPage";
+import UserDetailPage from "./ZUSTAND-PROJECT/pages/UserDetailPage";
 import ContactsRTKPage from "./pages/ContactsRTKPage";
 
 const router = createBrowserRouter([
