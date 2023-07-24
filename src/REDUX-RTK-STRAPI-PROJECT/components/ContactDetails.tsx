@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import {
   Contact,
-  ContactData,
-  ContactSingleData,
   useDeleteContactMutation,
   useGetSingleContactQuery,
   useUpdateContactMutation,
